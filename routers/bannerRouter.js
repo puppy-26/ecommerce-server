@@ -3,6 +3,8 @@ const bannerRouter = express.Router();
 const { authentication, adminAuthorization, bannerAuthorization } = require('../middlewares/auth');
 const BannerController = require('../controllers/bannerController');
 
+bannerRouter.get('/all', BannerController.getAllBanner);
+
 bannerRouter.use(authentication);
 bannerRouter.use(adminAuthorization);
 

@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasMany(models.Product, { foreignKey: "userId" });
       User.hasMany(models.Banner, { foreignKey: "userId" });
+      User.belongsToMany(models.Product, { through: 'Cart', foreignKey: 'userId' });
     }
   };
   User.init({
@@ -44,14 +45,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    role: {
-      type: DataTypes.STRING,
-      validate: {
-        notEmpty: {
-          msg: "Role required"
-        }
-      }
-    }
+    role: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'User',

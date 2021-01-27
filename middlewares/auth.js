@@ -1,4 +1,4 @@
-const { User, Product, Category, Banner } = require('../models/index');
+const { User, Product, Category, Banner, Cart } = require('../models/index');
 const { getPayload } = require('../helpers/jwt');
 
 async function authentication (req, res, next) {
@@ -81,10 +81,29 @@ async function bannerAuthorization (req, res, next) {
   }
 }
 
+async function cartAuthorization (req, res, next) {
+  try {
+    let data = await Cart.findOne({ where: { id: req.params.cartId } });
+
+    if (!data) {
+      return next({ code: 404, msg: `Cart with id ${req.params.bannerId} not found` });
+    }
+
+    if (data.userId == req.headers.payload.id) {
+      return next();
+    } else {
+      return next({ code: 401, msg: "Access denied" });
+    }
+  } catch (err) {
+    return next({ code: 500 });
+  }
+}
+
 module.exports = {
   authentication,
   adminAuthorization,
   productAuthorization,
   categoryAuthorization,
-  bannerAuthorization
+  bannerAuthorization,
+  cartAuthorization
 };

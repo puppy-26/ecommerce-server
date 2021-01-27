@@ -3,6 +3,31 @@ const { checkPassword } = require('../helpers/bcrypt');
 const { getToken } = require('../helpers/jwt');
 
 class AuthController {
+  static async register (req, res, next) {
+    try {
+      let data = {
+        email: req.body.email,
+        password: req.body.password
+      };
+
+      data = await User.create(data);
+
+      data = {
+        id: data.id,
+        email: data.email,
+        role: data.role
+      };
+
+      return res.status(201).json(data);
+    } catch (err) {
+      if (err.errors) {
+        return next({ code: 400, msg: err.errors });
+      }
+      console.log(err);
+      return next({ code: 500 });
+    }
+  }
+
   static async login (req, res, next) {
     try {
       let data = await User.findOne({ where: { email: req.body.email } });

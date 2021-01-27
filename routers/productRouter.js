@@ -3,6 +3,8 @@ const productRouter = express.Router();
 const { authentication, adminAuthorization, productAuthorization } = require('../middlewares/auth');
 const ProductController = require('../controllers/productController');
 
+productRouter.get('/all', ProductController.getAllProduct);
+
 productRouter.use(authentication);
 productRouter.use(adminAuthorization);
 

@@ -30,6 +30,18 @@ class BannerController {
     }
   }
 
+  static async getAllBanner (req, res, next) {
+    try {
+      let data = await Banner.findAll({
+        attributes: { exclude: ['updatedAt', 'createdAt'] } 
+      });
+
+      return res.status(200).json(data);
+    } catch (err) {
+      return next({ code: 500 });
+    }
+  }
+
   static async getBanner (req, res, next) {
     try {
       let data = await Banner.findAll({
